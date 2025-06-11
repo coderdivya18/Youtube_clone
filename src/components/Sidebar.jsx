@@ -37,7 +37,7 @@ const Sidebar = () => {
 
       {/* You Section */}
       <div className="space-y-2">
-        <p className="text-md font-bold text-black-500 my-4">You ></p>
+        <p className="text-md font-bold text-black-500 my-4">You </p>
         <SidebarItem icon={<History size={20} />} label="History" />
         <SidebarItem icon={<ListVideo size={20} />} label="Playlists" />
         <SidebarItem icon={<Video size={20} />} label="Your videos" />

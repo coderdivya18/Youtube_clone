@@ -23,7 +23,7 @@ const WatchPage = () => {
     try {
       const response = await fetch(YOUTUBE_WATCH_VIDEO_BY_ID_API(id));
       const json = await response.json();
-      console.log(json);
+      // console.log(json);
       setVideoData(json?.items?.[0]);
     } catch (e) {
       console.error("Error fetching video by ID:", e);

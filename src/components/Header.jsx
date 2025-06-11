@@ -32,7 +32,7 @@ const Header = () => {
 
   //Get auto suggestion api
   const getSearchSuggestions = async () => {
-    console.log("APICall- " + searchQuery);
+    //console.log("APICall- " + searchQuery);
     try {
       const response = await fetch(
         YOUTUBE_SEARCH_AUTO_COMPLETE_API + searchQuery,
