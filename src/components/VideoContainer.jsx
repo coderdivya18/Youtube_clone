@@ -15,7 +15,7 @@ const VideoContainer = () => {
       const data = await fetch(YOUTUBE_MOST_POPULAR_VIDEOS_API);
       const json = await data.json();
       setVideos(json?.items);
-      console.log(json?.items);
+      // console.log(json?.items);
     } catch (e) {
       console.log(e);
     }
@@ -26,7 +26,7 @@ const VideoContainer = () => {
     <div className="p-4 flex flex-wrap gap-4">
       {videos.length > 0 ? (
         videos.map((video) => (
-          <Link to={"/watch?v=" + video.id}>
+          <Link to={"/watch?v=" + video.id} key={video.id}>
             <VideoCard key={video.id} info={video} />
           </Link>
         ))

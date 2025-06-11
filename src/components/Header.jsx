@@ -1,10 +1,59 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Bell, Menu, Mic, Search } from "lucide-react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toggleMenu } from "../utils/slice/appSlice.js";
+import { YOUTUBE_SEARCH_AUTO_COMPLETE_API } from "../utils/constants.js";
+import { cacheResults } from "../utils/slice/searchSlice.js";
 
 const Header = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const searchCache = useSelector((store) => store.search);
   const dispatch = useDispatch();
+
+  // console.log(suggestions);
+  //Auto complete Feature
+  useEffect(() => {
+    //  console.log(searchQuery);
+    //make an api call after every key press , but if the difference between 2 API call is <200ms
+    //Decline the API call
+    const timer = setTimeout(() => {
+      //Check the cache Results
+      if (searchCache[searchQuery]) {
+        setSuggestions(searchCache[searchQuery]);
+      } else {
+        getSearchSuggestions();
+      }
+    }, 200);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  //Get auto suggestion api
+  const getSearchSuggestions = async () => {
+    console.log("APICall- " + searchQuery);
+    try {
+      const response = await fetch(
+        YOUTUBE_SEARCH_AUTO_COMPLETE_API + searchQuery,
+      );
+      const data = await response.json();
+      // console.log(data[1]);
+      setSuggestions(data[1]);
+      //update cache
+      dispatch(
+        cacheResults({
+          [searchQuery]: data[1],
+        }),
+      );
+
+      setShowSuggestions(true);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  //Toggling sideBar Menu
   const toggleMenuHandler = () => {
     dispatch(toggleMenu());
   };
@@ -27,9 +76,13 @@ const Header = () => {
       </div>
 
       {/* Middle Section */}
-      <div className="flex flex-1 max-w-xl mx-4">
+      <div className="flex flex-1 max-w-xl mx-4 relative">
         <input
           type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onFocus={() => setShowSuggestions(true)}
+          onBlur={() => setShowSuggestions(false)}
           placeholder="Search"
           className="w-full p-2 border border-gray-300 rounded-l-full text-sm outline-none focus:ring-1 focus:ring-gray-400"
         />
@@ -39,6 +92,21 @@ const Header = () => {
         <button className="ml-3 bg-gray-100 p-2 rounded-full hover:bg-gray-200">
           <Mic className="w-5 h-5" />
         </button>
+
+        {/*Auto suggestion Part*/}
+        {searchQuery && showSuggestions && suggestions.length > 0 && (
+          <div className="absolute top-10 z-10 w-full mt-1 bg-white rounded-lg shadow-lg border border-gray-200">
+            {suggestions.map((item, index) => (
+              <div
+                key={index}
+                className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer"
+              >
+                <Search className="w-4 h-4 mr-3 text-gray-500" />
+                <span className="text-sm text-gray-800">{item}</span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Right Section */}

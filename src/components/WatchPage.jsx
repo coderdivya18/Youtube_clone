@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { closeMenu } from "../utils/slice/appSlice.js";
 import { YOUTUBE_WATCH_VIDEO_BY_ID_API } from "../utils/constants.js";
+import CommentsContainer from "./CommentsContainer.jsx";
 
 const WatchPage = () => {
   const [searchParams] = useSearchParams();
@@ -31,7 +32,7 @@ const WatchPage = () => {
 
   return (
     <div className=" px-5 py-6">
-      <div className="">
+      <div className="mb-5">
         {videoId && (
           <div className="mb-4">
             <iframe
@@ -47,18 +48,19 @@ const WatchPage = () => {
 
         {videoData && (
           <div>
-            <h1 className="text-2xl font-semibold mb-2">
+            <h1 className="text-xl font-semibold mb-2">
               {videoData.snippet.title}
             </h1>
-            <p className="text-gray-700 font-medium">
+            <p className="text-gray-700 text-sm font-medium">
               {videoData.snippet.channelTitle}
             </p>
-            <p className="text-sm text-gray-500">
+            <p className="text-xs text-gray-500">
               {parseInt(videoData.statistics.viewCount).toLocaleString()} views
             </p>
           </div>
         )}
       </div>
+      <CommentsContainer />
     </div>
   );
 };
