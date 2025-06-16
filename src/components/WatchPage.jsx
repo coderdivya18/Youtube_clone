@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { closeMenu } from "../utils/slice/appSlice.js";
 import { YOUTUBE_WATCH_VIDEO_BY_ID_API } from "../utils/constants.js";
 import CommentsContainer from "./CommentsContainer.jsx";
+import LiveChat from "./LiveChat.jsx";
 
 const WatchPage = () => {
   const [searchParams] = useSearchParams();
@@ -32,9 +33,9 @@ const WatchPage = () => {
 
   return (
     <div className=" px-5 py-6">
-      <div className="mb-5">
+      <div className="flex flex-col lg:flex-row gap-6 mb-5">
         {videoId && (
-          <div className="mb-4">
+          <div className="flex-1 mb-4">
             <iframe
               className="w-full aspect-video rounded-xl shadow-md"
               width="1200"
@@ -43,22 +44,27 @@ const WatchPage = () => {
               title="YouTube video player"
               allowFullScreen
             />
+            {videoData && (
+              <div>
+                <h1 className="text-xl font-semibold mb-2 mt-3">
+                  {videoData.snippet.title}
+                </h1>
+                <p className="text-gray-700 text-sm font-medium">
+                  {videoData.snippet.channelTitle}
+                </p>
+                <p className="text-xs text-gray-500">
+                  {parseInt(videoData.statistics.viewCount).toLocaleString()}{" "}
+                  views
+                </p>
+              </div>
+            )}
           </div>
         )}
 
-        {videoData && (
-          <div>
-            <h1 className="text-xl font-semibold mb-2">
-              {videoData.snippet.title}
-            </h1>
-            <p className="text-gray-700 text-sm font-medium">
-              {videoData.snippet.channelTitle}
-            </p>
-            <p className="text-xs text-gray-500">
-              {parseInt(videoData.statistics.viewCount).toLocaleString()} views
-            </p>
-          </div>
-        )}
+        {/* LiveChat Section */}
+        <div className="w-full lg:w-[400px]">
+          <LiveChat />
+        </div>
       </div>
       <CommentsContainer />
     </div>
