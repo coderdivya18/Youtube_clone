@@ -129,4 +129,24 @@ const getRandomAvatar = () => {
   return `https://i.pravatar.cc/150?img=${id}`;
 };
 
-export { getRandomName, getRandomComment, getRandomAvatar };
+function isPrime(num) {
+  if (num < 2) return false;
+  for (let i = 2, sqrt = Math.sqrt(num); i <= sqrt; i++) {
+    if (num % i === 0) return false;
+  }
+  return true;
+}
+
+function findNthPrime(n) {
+  let count = 0;
+  let num = 1;
+  while (count < n) {
+    num++;
+    if (isPrime(num)) {
+      count++;
+    }
+  }
+  return num;
+}
+
+export { getRandomName, getRandomComment, getRandomAvatar, findNthPrime };
