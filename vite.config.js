@@ -6,8 +6,9 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   base: "/Youtube_clone/",
   build: {
+    outDir: "dist", // 👈 Optional, but explicit
     rollupOptions: {
-      input: "/index.html",
+      input: "index.html", // ✅ FIX: remove leading slash!
     },
   },
 });
